@@ -1,6 +1,6 @@
 		html,body,.sy,.wrapper{
 				height: 100%;
-				color: #fff;
+				color: #333;
 			}
 		.sy>.wrapper{
 			position: relative;
@@ -9,11 +9,14 @@
 		}
 		.sy>.wrapper>.top{
 			flex-basis: 20%;
-			font-size: 3em;
 			text-align: center;
-			line-height: 95px;
 			background-color: #1369c0;
 
+		}
+		.sy>.wrapper>.top>b{
+			font-size: 3em;
+			position: relative;
+			top: 25%;
 		}
 		.sy>.wrapper>.bottom{
 			flex: 1;
@@ -55,4 +58,6 @@
 		.sy>.wrapper>.bottom>.left>ul>li>a{
 			font-size: 2em;
 			text-align: right;
+			color: #333;
+			text-decoration: none;
 		}
