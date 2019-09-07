@@ -27,11 +27,13 @@
 	}
 </style>
 <!-- 测试插件 -->
-<!-- <script src="https://cdn.bootcss.com/jquery/3.4.1/jquery.min.js"></script> -->
+<script src="https://cdn.bootcss.com/jquery/3.4.1/jquery.min.js"></script>
 <script>
 	var baseURL = "http://134.175.154.93:6677";
 //给添加操作绑定事件
 	var btn_add=document.getElementById('btn_add');
+	var tbody = document.getElementsByTagName("tbody")[0];
+	//表单清空
 	btn_add.onclick=function(){
 		document.querySelector("input[name=realname]").value = "";
 		document.querySelector("input[name=telephone]").value = "";
@@ -67,9 +69,6 @@
 		 	}
 		 	event.preventDefault();
 		}
-
-
-
 
 		//数据删除和更新
 		tbody.onclick = function(event){
