@@ -1,1 +1,101 @@
-<div></div>
+<script src="https://cdn.bootcss.com/jquery/3.4.1/jquery.min.js"></script>
+
+<style type="text/css">
+	 .wrapper{
+	 	color:#666;
+	 }
+	.btns{
+			margin: 10px 0;
+		}
+	.btn{
+		border: 1px solid #ccc;
+		display: inline-block;
+		padding: .5em 1em;
+		margin-right: 5px;
+		cursor: pointer;	
+		border-radius: 3px;
+	}
+	table{
+		width: 100%;
+		border-collapse: collapse;
+		text-align:center;
+		line-height: 2em;
+	}
+	table td{
+		border:1px solid #666;
+	}
+	table td:nth-child(1){
+		width: 50px;
+	}
+	table td:nth-child(7){
+		width: 200px;
+	}
+	table tr.move{
+		background-color: #ededed;
+	}
+	a{
+		text-decoration: none;
+		color: teal;
+	}
+</style>
+
+
+<script type="text/javascript"></script>
+
+
+
+<div class="btns">
+	<div class="btn">
+		添加
+	</div>
+	<div class="btn">
+		批量添加
+	</div>
+	<div class="btn">
+		导出
+	</div>
+</div>
+
+<!-- 创建一个表单用于执行提交添加数据 -->
+<div style="margin-bottom: 10px;" >
+	<form action="javascript:void(0)">
+		<input type="hidden" name="id">
+		姓名<input type="text" name="realname">
+		手机号<input type="text" name = "telephone">
+		<input type="submit" value="提交">
+	</form>
+</div>
+
+<table>
+	<thead>
+		<tr>
+			<td>编号</td>
+			<td>产品名称</td>
+			<td>产品描述</td>
+			<td>价格</td>
+			<td>所属分类</td>
+			<td>状态</td>
+			<td>操作</td>
+		</tr>
+	</thead>
+	<thead>
+		<tr>
+			<td>
+				<input type="radio" name="">
+			</td>
+			<td></td>
+			<td></td>
+			<td></td>
+			<td></td>
+			<td></td>
+			<td>
+				<a href="#">
+					删除
+				</a>
+				<a href="#">
+					修改
+				</a>
+			</td>
+		</tr>
+	</thead>
+</table>
