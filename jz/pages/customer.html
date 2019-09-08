@@ -9,8 +9,8 @@
 		line-height: 2em;
 	}
 	.table tr.current {
-		background-color: #ededed;
-	}
+			background-color: #ededed;
+		}
 	.none {
 		display: none;
 	}
@@ -27,7 +27,7 @@
 	}
 </style>
 <!-- 测试插件 -->
-<script src="https://cdn.bootcss.com/jquery/3.4.1/jquery.min.js"></script>
+<!-- <script src="https://cdn.bootcss.com/jquery/3.4.1/jquery.min.js"></script> -->
 <script>
 	var baseURL = "http://134.175.154.93:6677";
 //给添加操作绑定事件
@@ -69,7 +69,15 @@
 		 	}
 		 	event.preventDefault();
 		}
-
+		//批量操作
+		var btn_import=document.getElementById("btn_import");
+		btn_import.onclick=function(event){
+			alert("选中你要删除的顾客");
+			//如何遍历tbody,返回被选中的tr,并删除
+			$("#table").find("tr").each(function(){
+				
+			})
+		}
 		//数据删除和更新
 		tbody.onclick = function(event){
 			if(event.target.nodeName === "A"){
@@ -110,7 +118,19 @@
 				}
 			}
 		}
-
+		//将tr背景变色
+		tbody.onmouseover = function(event){
+			var target = event.target;
+			if(target.nodeName === "TD"){
+				target.parentNode.className = "current"
+			}
+		}
+		tbody.onmouseout = function(event){
+			var target = event.target;
+			if(target.nodeName === "TD"){
+				target.parentNode.className = ""
+			}
+		}
 // 加载数据
 	function reloadData(){
 		var url = baseURL+"/customer/findCustomerAll";
