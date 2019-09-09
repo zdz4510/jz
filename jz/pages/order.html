@@ -1,0 +1,83 @@
+<style>
+	#one  {
+		margin-bottom: .5em;
+	}
+	#one > input {
+		border-radius: .5em;
+		color: #333;
+	}
+	.table {
+		border-collapse: collapse;
+		width: 100%;
+		text-align: center;
+	}
+	.table td {
+		border: 1px solid #ccc;
+		line-height: 2em;
+	}
+	.table tr.current {
+		background-color: #ededed;
+	}
+	.none {
+		display: none;
+	}
+	.btn {
+		padding: .5em 1em;
+		border-radius: 3px;
+		color: #333;
+		border:1px solid #ccc;
+		cursor: pointer;
+		display: inline-block;
+	}
+	.btns {
+		margin-bottom: .5em;
+	}
+</style>
+<script>
+	var baseURL = "http://172.16.7.250:6677";
+	function reloadData(){
+		var url = baseURL+"/waiter/deleteWaiterById";
+		$.get(url,function(response,status){
+			$("#waiter_tb1 tbody").empty();
+			response.data.forEach(function(item){
+				var newTr = $(`<tr>
+				<td><input type="checkbox" value="`+item.id+`"></td>
+				<td>`+item.realname+`</td>
+				<td>`+item.status+`</td>
+				<td>`+item.telephone+`</td>
+				<td>
+					<a class="btn_del" href="#">删除</a>
+					<a class="btn_upd" href="#">修改</a>
+				</td>
+			</tr>`);
+			$("#waiter_tb1").append(newTr)
+			});
+		});
+	}
+	$(function(){
+		reloadData();
+	})
+	$.get(url,function)
+</script>
+<div class="waiter">
+	订单管理
+	<div id="one">
+		<input type="submit" value="批量删除">
+		<input type="submit" value="导出" class="btn_find">
+	</div>
+
+	<table class="table" id="waiter_tb1">
+		<thead>
+			<tr>
+				<td width="80px">工号</td>
+				<td>姓名</td>
+				<td>状态</td>
+				<td>手机号</td>
+				<td width="100px">操作</td>
+			</tr>
+		</thead>
+		<tbody>
+			
+		</tbody>
+	</table>
+</div>

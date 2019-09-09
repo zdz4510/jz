@@ -1,5 +1,8 @@
 		html,body,.sy,.wrapper{
 				height: 100%;
+				color: #333;
+				margin: 0;
+				padding: 0;
 			}
 		.sy>.wrapper{
 			position: relative;
@@ -8,8 +11,14 @@
 		}
 		.sy>.wrapper>.top{
 			flex-basis: 20%;
-			background-color: black;
+			text-align: center;
+			background-color: #1369c0;
 
+		}
+		.sy>.wrapper>.top>b{
+			font-size: 3em;
+			position: relative;
+			top: 20%;
 		}
 		.sy>.wrapper>.bottom{
 			flex: 1;
@@ -24,7 +33,7 @@
 			height: 100%;
 			float: left;
 			overflow-y:none; 
-			background-color: teal;
+			background-color: #428bf1;
 		}
 		.sy>.wrapper>.bottom>.right{
 			height: 100%;
@@ -37,4 +46,20 @@
 			width: 96%;
 			margin: 2%;
 			background-color: #fff;
+		}
+		.sy>.wrapper>.bottom>.left>ul{
+			width: 100%;
+		}
+		.sy>.wrapper>.bottom>.left>ul>li{
+			list-style: none;
+			border-top: 1px solid #ededed;
+			border-bottom: 1px solid #ededed;
+			position: relative;
+			left: -40px;
+		}
+		.sy>.wrapper>.bottom>.left>ul>li>a{
+			font-size: 2em;
+			text-align: right;
+			color: #333;
+			text-decoration: none;
 		}
