@@ -37,16 +37,16 @@
 	</div>
 	<script>
 		var ul = document.getElementsByTagName("ul")[0];
-		tbody.onmouseover = function(event){
-			var ul = event.target;
-			if(ul.nodeName === "LI"){
-				ul.parentNode.className = "current"
+		ul.onmouseover = function(event){
+			var l = event.target;
+			if(l.nodeName === "LI"){
+				l.parentNode.className = "current"
 			}
 		}
-		tbody.onmouseout = function(event){
-			var ul = event.target;
-			if(ul.nodeName === "li"){
-				ul.parentNode.className = ""
+		ul.onmouseout = function(event){
+			var l = event.target;
+			if(l.nodeName === "li"){
+				l.parentNode.className = ""
 			}
 		}
 	</script>
