@@ -72,10 +72,6 @@
 
 <script type="text/javascript">
 		var baseURL = "http://134.175.154.93:6677";
-		// var tbody = document.getElementsByTagName("tbody")[0];
-		// var tbody = $("tbody")[0];
-		// console.log(tbody);
-
 		//重载数据
 		function reloadData(){
 			var url = baseURL +"/product/findAllProduct";
@@ -97,10 +93,10 @@
 							<td>`+item.categoryId+`</td>
 							<td>`+item.status+`</td>
 							<td>
-								<a href="#" class="btn_del">
+								<a href="javascript:void(0)" class="btn_del">
 									删除
 								</a>
-								<a href="#" class="btn_upd">
+								<a href="javascript:void(0)" class="btn_upd">
 									修改
 								</a>
 							</td>
@@ -117,12 +113,18 @@
 		//添加按钮绑定事件
 		$("#btn_add").click(function(){
 			$(".hide").removeClass("hide");
-			var id = document.querySelector("input[name=id]").value="";
-			var name = document.querySelector("input[name=name]").value="";
-			var description = document.querySelector("input[name=description]").value="";
-			var price = document.querySelector("input[name=price]").value="";
+			//置表单为空
+			// var id = document.querySelector("input[name=id]").value="";
+			// var name = document.querySelector("input[name=name]").value="";
+			// var description = document.querySelector("input[name=description]").value="";
+			// var price = document.querySelector("input[name=price]").value="";
+			$('input[name=id]').val("");
+			$('input[name=name]').val("");
+			$('input[name=description]').val("");
+			$('input[name=price]').val("");
 		});
-		//修改按钮
+		//更新按钮
+		
 		
 		//取消按钮绑定事件
 		$('input[value="取消"]').click(function(){
@@ -132,23 +134,18 @@
 		//提交按钮
 		$('input[value="提交"]').click ( function(event){
 			//获取用户输入
-			var id = document.querySelector("input[name=id]").value;
-			var name = document.querySelector("input[name=name]").value;
-			var description = document.querySelector("input[name=description]").value; 
-			var price = document.querySelector("input[name=price]").value; 
-			// var id = $('input[name=id]').value;
-			// var name = $('input[name=name]').value;
-			// var description = $('input[name=description]').val;
-			// var price = $('input[name=price]').value;
+			var id = $('input[name=id]').val();
+			var name = $('input[name=name]').val();
+			var description = $('input[name=description]').val();
+			var price = $('input[name=price]').val();
 			var url = baseURL+"/product/insertProduct";
 			//判断是否有id存在,有则可以执行修改操作,无则进行添加
 			var data = {
 				id:id,
 				name:name,
 				description:description,
-				price:price,
+				price:price,	
 			}
-			$('input[type="text"]').val("");
 			$(".modal,.shade").addClass("hide");
 			$.post(url,data,function(response,status){
 				alert(response.message);
@@ -159,14 +156,12 @@
 
 
 		// 给删除按钮添加事件
-		$("tbody").on("click",function(event){
-			if (event.target.nodeName === "A") {
+		$("tbody").on("click","a",function(event){
 				switch(event.target.className){
 					//获取要删除的id
 					case "btn_del":
 						//1.先获取要删除的id
-						var id = event.target.parentNode.parentNode.firstElementChild.firstElementChild.value;
-						// var id = $(event.target).parents("tr").find(".one").value;
+						var id = $(event.target).parents("tr").children().eq(0).find("input").val();
 						//2. 编写ajax进行删除
 						var url = baseURL+"/product/deleteProductById";
 						var data = "id="+id;
@@ -175,30 +170,45 @@
 								reloadData();
 						});
 						break;
+						//修改
 					case "btn_upd":
 						$(".btn_upd").click(function(){
 							$(".hide").removeClass("hide");
+							//获取数据
+							var id = $(event.target).parents("tr").children().eq(0).find('input').val();
+							var name = $(event.target).parents("tr").children().eq(1).text();
+							var description = $(event.target).parents("tr").children().eq(2).text();
+							var price= $(event.target).parents("tr").children().eq(3).text();
+							//将数据传入表单
+							$('input[name=id]').val(id);
+							$('input[name=name]').val(name);
+							$('input[name=description]').val(description);
+							$('input[name=price]').val(price);
+							//给更新按钮添加事件
+							$('input[value="更新"]').click(function(){
+								var url = baseURL+"/product/updateProduct";
+								//获取用户输入的值,修改表单的值
+								var ids =$('input[name=id]').val();
+								var names =$('input[name=name]').val();
+								var descriptions =$('input[name=description]').val();
+								var prices =$('input[name=price]').val();
+								var data = {
+									id:ids,
+									name:names,	
+									description:descriptions,
+									price:prices,
+								}
+								//取消模态框
+								$(".modal,.shade").addClass("hide");
+								$.post(url,data,function(response,status){
+									alert(response.message);
+									reloadData();
+								})
+							})
 						})
-						// //获取id
-						 var id = event.target.parentNode.parentNode.children[0].firstElementChild.value;
-						 //获取名称
-						 var name = event.target.parentNode.parentNode.children[1].innerText;
-						 //获取描述
-						 var description = event.target.parentNode.parentNode.children[2].innerText;
-						 document.querySelector("input[name=id]").value=id;
-						 document.querySelector("input[name=name]").value=name;
-						 document.querySelector("input[name=description]").value=description; 
-						// var url = baseURL+"/product/updateProduct";
-						// var data = "id="+id;
-						// $.post(url,data,function(response,status){
-						// 		alert(response.message);
-						// 		reloadData();
-						// });
 						break;
-					
-				}
-			}
-		})
+					}
+				})
 
 		//增加鼠标移入移出背景色事件
 		$("tbody").mouseover(function(event){
@@ -223,7 +233,7 @@
 		添加
 	</div>
 	<div class="btn">
-		批量添加
+		批量删除
 	</div>
 	<div class="btn">
 		导出
@@ -241,6 +251,7 @@
 		<p>产品价格：<input type="text" name = "price"></p>
 		<p>
 			<input type="submit" value="提交" class="on">
+			<input type="submit" value="更新">
 			<input type="submit" value="取消">
 		</p>
 	<!-- </form> -->

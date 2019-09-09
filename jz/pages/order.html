@@ -1,16 +1,45 @@
+<script src="https://cdn.bootcss.com/jquery/3.4.1/jquery.min.js"></script>
 <style>
-	#one  {
+	
+	
+	.btns {
 		margin-bottom: .5em;
+		position: relative;
+		left:0%;
+		top: 40px;
 	}
-	#one > input {
+	.btn {
+		padding: .5em 1em;
+		border-radius: 1em;
+		color: #333;
+		border:1px solid #ccc;
+		cursor: pointer;
+		display: inline-block;
+		background-color: #409EFF;
+	}
+	form {
+		float: right;
+		position: relative;
+		right: 7%;
+	}
+	input {
 		border-radius: .5em;
 		color: #333;
+	}
+	.button {
+		background-color: #409EFF;
+		border: none;
+		color: #fff;
+		text-shadow: 1px 1px 1px #949494;
+		border-radius: 5px;
+		cursor: pointer;
 	}
 	.table {
 		border-collapse: collapse;
 		width: 100%;
 		text-align: center;
 	}
+	
 	.table td {
 		border: 1px solid #ccc;
 		line-height: 2em;
@@ -21,71 +50,172 @@
 	.none {
 		display: none;
 	}
-	.btn {
-		padding: .5em 1em;
-		border-radius: 3px;
-		color: #333;
-		border:1px solid #ccc;
-		cursor: pointer;
-		display: inline-block;
-	}
-	.btns {
-		margin-bottom: .5em;
-	}
+
+
 </style>
 <script>
-	var baseURL = "http://172.16.7.250:6677";
+window.onload=function(){
+	$.ajaxSetup({
+		timeout:1000,
+		error:function(error){
+			alert("出现错误了！");
+			console.log(error);
+		},
+		complete:function(){
+			console.log("---------");
+		}
+	})
+	var btn_add = document.getElementById("btn_add");
+	var tbody = document.getElementsByTagName("tbody")[0];
+	var baseURL = "http://134.175.154.93:6677";
 	function reloadData(){
-		var url = baseURL+"/waiter/deleteWaiterById";
+		var url = baseURL+"/order/findAllOrder";
 		$.get(url,function(response,status){
-			$("#waiter_tb1 tbody").empty();
+			$("#order_tb1 tbody").empty();
 			response.data.forEach(function(item){
 				var newTr = $(`<tr>
 				<td><input type="checkbox" value="`+item.id+`"></td>
-				<td>`+item.realname+`</td>
-				<td>`+item.status+`</td>
-				<td>`+item.telephone+`</td>
+				<td>`+item.addressId+`</td>
+				
+				<td>`+item.orderTime+`</td>
+				<td>`+item.customerId+`</td>
+				
 				<td>
-					<a class="btn_del" href="#">批量删除</a>
-					<a class="btn_upd" href="#">导出</a>
+					<a class="btn_del" href="#">删除</a>
+					<a class="btn_upd" href="#">修改</a>
 				</td>
 			</tr>`);
-			$("#waiter_tb1").append(newTr)
+			$("#order_tb1").append(newTr)
 			});
 		});
 	}
 	$(function(){
 		reloadData();
 	})
-	$.get(url,function)
+
+	$(document).ready(function(){
+		$("tbody").mouseover(function(event){
+			var target=event.target
+			if (target.nodeName==="TD") {
+				target.parentNode.className = "current"
+			}
+		});
+		$("tbody").mouseout(function(event){
+			var target=event.target
+			if (target.nodeName==="TD") {
+				target.parentNode.className = ""
+			}
+		});
+	});
+
+	document.forms[0].onsubmit = function(event){
+		var url = baseURL+"/order/insertOrder";
+		var id = document.querySelector("input[name=id]").value;
+		var addressId = document.querySelector("input[name=addressId]").value;
+		var orderTime = document.querySelector("input[name=orderTime]").value;
+		var customerId = document.querySelector("input[name=customerId]").value;
+		
+		var data ={
+			id:id,
+			addressId:addressId,
+			orderTime:orderTime,
+			customerId:customerId,
+		};
+
+		$.post(url,data,function(a,b){
+			alert(a.message);
+			reloadData();
+		});
+
+		event.preventDefault();
+	}
+
+	btn_add.onclick = function(){
+		document.querySelector("input[name=addressId]").value = "";
+		document.querySelector("input[name=orderTime]").value = "";
+		document.querySelector("input[name=id]").value = "";
+		document.querySelector("input[name=customerId]").value = "";
+		
+	}
+	
+
+	tbody.onclick = function(event){
+		if(event.target.nodeName === "A" ){
+			switch(event.target.className){
+				case "btn_del":
+					var id = event.target.parentNode.parentNode.firstElementChild.firstElementChild.value;
+					var url = baseURL+"/order/deleteOrderById";
+					var data = "id="+id;
+					$.get(url,data,function(response,status){
+						alert(response.message);
+						reloadData();
+					});
+					break;
+				case "btn_upd":
+					var id = event.target.parentNode.parentNode.children[0].firstElementChild.value;
+					var addressId = event.target.parentNode.parentNode.children[1].innerText;
+					var orderTime = event.target.parentNode.parentNode.children[2].innerText;
+					var customerId = event.target.parentNode.parentNode.children[3].innerText;
+					
+					document.querySelector("input[name=id]").value = id;
+					document.querySelector("input[name=addressId]").value = addressId;
+					document.querySelector("input[name=orderTime]").value = orderTime;
+					
+					document.querySelector("input[name=customerId]").value = customerId;
+
+					break;
+				}
+			}
+		}
+
+		reloadData();
+}
+	
 </script>
-<div class="waiter">
-	订单管理
-	<div id="one">
-		<input type="submit" value="批量删除">
-		<input type="submit" value="导出" class="btn_find">
+<div>订单管理</div>
+<div class="order">
+	<div class="btns">
+		<div id="btn_add" class="btn">添加</div>
+		<div id="btn_import" class="btn">批量导入</div>
+		<!-- <div id="one" class="btn_find">
+			<input type="text" name="id">
+		</div> -->
 	</div>
 
-	<table class="table" id="waiter_tb1">
+	<div style="margin-bottom: .5em">
+		<form action="javascript:void(0)">
+			<input type="hidden" name="id" />
+			地址编号<input type="text" name="addressId"/>
+			下单时间<input type="text" name="orderTime"/>
+			员工编号<input type="text" name="customerId">
+			<input type="submit" class="button" value="提交">
+		</form>
+	</div>
+	
+	
+	<table class="table" id="order_tb1">
 		<thead>
 			<tr>
 				<td width="80px">顾客编号</td>
 				<td>地址编号</td>
 				<td>下单时间</td>
 				<td>员工编号</td>
-				<td width="100px">总计个数</td>
-				<td>操作</td>
+				<td width="100px">操作</td>
 			</tr>
 		</thead>
 		<tbody>
-			<tr>
+			<tr class="none">
 				<td><input type="checkbox"></td>
 				<td></td>
+
 				<td></td>
 				<td></td>
-				<td></td>
-				<td><a href=""></a></td>
+				<td>
+					<a class="btn_del" href="#">删除</a>
+					<a class="btn_upd" href="#">修改</a>
+				</td>
 			</tr>
 		</tbody>
 	</table>
 </div>
+	

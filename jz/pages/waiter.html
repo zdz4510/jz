@@ -89,18 +89,56 @@
 
 
 </style>
+
+<h1>服务员工管理</h1>
+
+<div class="waiter">
+	<div class="hide wrapper01"></div>
+	<div class="btns">
+		<div id="btn_add" class="btn">添加</div>
+		<div id="btn_import" class="btn">批量删除</div>
+		<!-- <div id="one" class="btn_find">
+			<input type="text" name="id">
+		</div> -->
+	</div>
+		<div style="margin-bottom: .5em" class="hide modal">
+			<form action="javascript:void(0)">
+				<input type="hidden" name="id" />
+				姓名<input type="text" name="realname"/>
+				手机号 <input type="text" name="telephone"/>
+				<input type="submit" class="button" value="提交">
+				<input type="submit" class="button" name="btn_gengxin" value="更新">
+				<div class="btn_quit">退出</div>
+			</form>
+		</div>
+	
+	<table class="table" id="waiter_tb1">
+		<thead>
+			<tr>
+				<td width="80px">工号</td>
+				<td>姓名</td>
+				<td>状态</td>
+				<td>手机号</td>
+				<td width="100px">操作</td>
+			</tr>
+		</thead>
+		<tbody>
+			<tr class="none">
+				<td><input type="checkbox"></td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td>
+					<a class="btn_del" href="javascript:void(0)">删除</a>
+					<a class="btn_upd" href="javascript:void(0)">修改</a>
+				</td>
+			</tr>
+		</tbody>
+	</table>
+</div>
+	
 <script>
-window.onload=function(){
-	$.ajaxSetup({
-		timeout:1000,
-		error:function(error){
-			alert("出现错误了！");
-			console.log(error);
-		},
-		complete:function(){
-			console.log("---------");
-		}
-	})
+
 	var btn_add = document.getElementById("btn_add");
 	var tbody = document.getElementsByTagName("tbody")[0];
 	var baseURL = "http://134.175.154.93:6677";
@@ -124,6 +162,16 @@ window.onload=function(){
 		});
 	}
 	$(function(){
+		$.ajaxSetup({
+			timeout:1000,
+			error:function(error){
+				alert("出现错误了！");
+				console.log(error);
+			},
+			complete:function(){
+				console.log("---------");
+			}
+		})
 		reloadData();
 	})
 
@@ -187,64 +235,39 @@ window.onload=function(){
 					});
 					break;
 				case "btn_upd":
-					var id = event.target.parentNode.parentNode.children[0].firstElementChild.value;
-					var realname = event.target.parentNode.parentNode.children[1].innerText;
-					var telephone = event.target.parentNode.parentNode.children[3].innerText;
-					document.querySelector("input[name=realname]").value = realname;
-					document.querySelector("input[name=telephone]").value = telephone;
-					document.querySelector("input[name=id]").value = id;
+				
+					var	id = $(event.target).parents("tr").children().eq(0).find("input").val();
+					var	realname = $(event.target).parents("tr").children().eq(1).text();
+					var	telephone = $(event.target).parents("tr").children().eq(3).text();
+					//将数据放进表单里
+					$("input[name=id]").val(id);
+					$("input[name=realname]").val(realname);
+					$("input[name=telephone]").val(telephone);
+					//给修改按钮添加事件
+					$(".btn_upd").click(function(){
+						$(".hide").removeClass("hide");
+						$("input[name=btn_gengxin]").click(function(){
+							var url = baseURL+"/waiter/updateWaiter"
+
+							var ids = $("input[name=id]").val();
+							var realnames = $("input[name=realname]").val();
+							var telephones = $("input[name=telephone]").val();
+							var data = {
+								id:ids,
+								realname:realnames,
+								telephone:telephones
+							}
+							$.post(url,data,function(response,status){
+							alert(response.message);
+							reloadData();
+							});
+						});
+					});
 					break;
 				}
 			}
 		}
 
 		reloadData();
-}
 	
 </script>
-<h1>服务员工管理</h1>
-
-<div class="waiter">
-	<div class="hide wrapper01"></div>
-	<div class="btns">
-		<div id="btn_add" class="btn">添加</div>
-		<div id="btn_import" class="btn">批量导入</div>
-		<!-- <div id="one" class="btn_find">
-			<input type="text" name="id">
-		</div> -->
-	</div>
-		<div style="margin-bottom: .5em" class="hide modal">
-			<form action="javascript:void(0)">
-				<input type="hidden" name="id" />
-				姓名<input type="text" name="realname"/>
-				手机号 <input type="text" name="telephone"/>
-				<input type="submit" class="button" value="提交">
-				<div class="btn_quit">退出</div>
-			</form>
-		</div>
-	
-	<table class="table" id="waiter_tb1">
-		<thead>
-			<tr>
-				<td width="80px">工号</td>
-				<td>姓名</td>
-				<td>状态</td>
-				<td>手机号</td>
-				<td width="100px">操作</td>
-			</tr>
-		</thead>
-		<tbody>
-			<tr class="none">
-				<td><input type="checkbox"></td>
-				<td></td>
-				<td></td>
-				<td></td>
-				<td>
-					<a class="btn_del" href="javascript:void(0)">删除</a>
-					<a class="btn_upd" href="javascript:void(0)">修改</a>
-				</td>
-			</tr>
-		</tbody>
-	</table>
-</div>
-	
