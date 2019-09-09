@@ -34,9 +34,38 @@
 	}
 
 </style>
+<script src="https://cdn.bootcss.com/jquery/3.4.1/jquery.min.js"></script>
 <script>
 	var baseURL = "http://134.175.154.93:6677";
-//给添加操作绑定事件
+
+// 加载数据
+	function reloadData(){
+		var url = baseURL+"/customer/findCustomerAll";
+		$.get(url,function(response,status){
+			//1. 将tbody清空
+			$("#customer_tbl tbody").empty();
+			//2. 追加新的值
+			response.data.forEach(function(item){
+				var newTr = $(`<tr>
+					<td><input type="checkbox" value="`+item.id+`"></td>
+					<td>`+item.realname+`</td>
+					<td>`+item.status+`</td>
+					<td>`+item.telephone+`</td>
+					<td>
+						<a class="btn_del" href="#">删除</a>
+						<a class="btn_upd" href="#">修改</a>
+						<a class="btn_details" href="#">详情</a>
+					</td>
+				</tr>`);
+				$("#customer_tbl").append(newTr)
+			});
+		});
+	}
+	// 文档加载完毕之后执行
+	$(function(){
+		//调用重载数据
+		reloadData();
+		//给添加操作绑定事件
 	var btn_add=document.getElementById('btn_add');
 	var tbody = document.getElementsByTagName("tbody")[0];
 	//表单清空
@@ -117,6 +146,7 @@
 					case "btn_del":
 						// 1. 先获取要删除的id
 						var id = event.target.parentNode.parentNode.firstElementChild.firstElementChild.value;
+						console.log(id);
 						// 2. 编写ajax进行删除
 						var xhr = new XMLHttpRequest();
 						xhr.open("POST",baseURL+"/customer/deleteCustomerById");
@@ -147,16 +177,23 @@
 						document.querySelector("input[name=telephone]").value = telephone;
 						document.querySelector("input[name=id]").value = id;
 						break;
-					case "btn_btn_details":
-						var id=id = event.target.parentNode.parentNode.children[0].firstElementChild.value;
-						var url ="./pages/customerDetails.html";
-						$("#wrapper").load(url+"?time="+Math.random())
-					// 将值保存到浏览器中
-					sessionStorage.setItem("customerId",id)
-					break;
-				}
+					case "btn_details":
+				// 获取当前行的id
+				var id = event.target.parentNode.parentNode.firstElementChild.firstElementChild.value;
+				var realname=event.target.parentNode.parentNode.children[1].innerTxet;
+				var telephone = event.target.parentNode.parentNode.children[3].innerText;
+				//跳转到详情页面
+				var url ="./pages/customerDetails.html"
+				$("#wrapper").load(url+"?time="+Math.random())
+				// 将值保存到浏览器中
+				// sessionStorage.setItem("customerId",id)
+				localStorage.setItem("customerId",id);
+				localStorage.setItem("customerRealname",realname);
+				localStorage.setItem("customerTelephone",telephone);
+				break;
 			}
 		}
+	}
 		//将tr背景变色
 		tbody.onmouseover = function(event){
 			var target = event.target;
@@ -170,33 +207,7 @@
 				target.parentNode.className = ""
 			}
 		}
-// 加载数据
-	function reloadData(){
-		var url = baseURL+"/customer/findCustomerAll";
-		$.get(url,function(response,status){
-			//1. 将tbody清空
-			$("#customer_tbl tbody").empty();
-			//2. 追加新的值
-			response.data.forEach(function(item){
-				var newTr = $(`<tr>
-					<td><input type="checkbox" value="`+item.id+`"></td>
-					<td>`+item.realname+`</td>
-					<td>`+item.status+`</td>
-					<td>`+item.telephone+`</td>
-					<td>
-						<a class="btn_del" href="#">删除</a>
-						<a class="btn_upd" href="#">修改</a>
-						<a class="btn_btn_details" href="#">详情</a>
-					</td>
-				</tr>`);
-				$("#customer_tbl").append(newTr)
-			});
-		});
-	}
-	// 文档加载完毕之后执行
-	$(function(){
-		//调用重载数据
-		reloadData();
+
 	})
 
 	</script>

@@ -1,1 +1,25 @@
-你好
+<style>
+	.content{
+		font-size: 1em;
+		padding: 0;
+		margin: 0;
+	}
+	.content div{
+		width: 100px;
+		padding: 10px;
+		margin: 0;
+	}	
+</style>
+<div class="content">
+	<span id="inner"></span>
+	<div>姓名：<input type="text" class="realname" value=""></div>
+	<div>手机号：<input type="text" class="telephone" value=""></div>
+</div>
+<script>
+var naid_id = localStorage.getItem("customerId");
+document.getElementById("inner").innerText="ID为"+naid_id;
+var naid_name = localStorage.getItem("customerRealname");
+document.querySelector('input[class="realname"]').value=naid_name;
+var naid_tel = localStorage.getItem("customerTelephone");
+document.querySelector('input[class="telephone"]').value=naid_tel;
+</script>
