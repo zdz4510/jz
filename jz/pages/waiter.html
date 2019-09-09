@@ -1,15 +1,53 @@
+<script src="https://cdn.bootcss.com/jquery/3.4.1/jquery.min.js"></script>
 <style>
-	#one  {
-		margin-bottom: .5em;
+	h1 {
+		display: inline-block;
+		margin: auto 0px;
+		font-size: 36px;
+		color: #321;
+		position: relative;
+		left: 45%;
 	}
-	#one > input {
+	.btns {
+		margin-bottom: .5em;
+		position: relative;
+		left:35%;
+		top: 40px;
+	}
+	.btn {
+		padding: .5em 1em;
+		border-radius: 1em;
+		color: #333;
+		border:1px solid #ccc;
+		cursor: pointer;
+		display: inline-block;
+		background-color: #409EFF;
+	}
+	form {
+		float: right;
+		position: relative;
+		right: 7%;
+	}
+	input {
 		border-radius: .5em;
 		color: #333;
+	}
+	.button {
+		background-color: #409EFF;
+		border: none;
+		color: #fff;
+		text-shadow: 1px 1px 1px #949494;
+		border-radius: 5px;
+		cursor: pointer;
 	}
 	.table {
 		border-collapse: collapse;
 		width: 100%;
 		text-align: center;
+	}
+	tbody {
+		background-image: url(https://ss2.bdstatic.com/70cFvnSh_Q1YnxGkpoWK1HF6hhy/it/u=3251793578,2590133884&fm=26&gp=0.jpg);
+		background-size: contain;
 	}
 	.table td {
 		border: 1px solid #ccc;
@@ -21,22 +59,26 @@
 	.none {
 		display: none;
 	}
-	.btn {
-		padding: .5em 1em;
-		border-radius: 3px;
-		color: #333;
-		border:1px solid #ccc;
-		cursor: pointer;
-		display: inline-block;
-	}
-	.btns {
-		margin-bottom: .5em;
-	}
+
+
 </style>
 <script>
-	var baseURL = "http://172.16.7.250:6677";
+window.onload=function(){
+	$.ajaxSetup({
+		timeout:1000,
+		error:function(error){
+			alert("出现错误了！");
+			console.log(error);
+		},
+		complete:function(){
+			console.log("---------");
+		}
+	})
+	var btn_add = document.getElementById("btn_add");
+	var tbody = document.getElementsByTagName("tbody")[0];
+	var baseURL = "http://134.175.154.93:6677";
 	function reloadData(){
-		var url = baseURL+"/waiter/deleteWaiterById";
+		var url = baseURL+"/waiter/findAllWaiter";
 		$.get(url,function(response,status){
 			$("#waiter_tb1 tbody").empty();
 			response.data.forEach(function(item){
@@ -57,15 +99,96 @@
 	$(function(){
 		reloadData();
 	})
-	$.get(url,function)
+
+	$(document).ready(function(){
+		$("tbody").mouseover(function(event){
+			var target=event.target
+			if (target.nodeName==="TD") {
+				target.parentNode.className = "current"
+			}
+		});
+		$("tbody").mouseout(function(event){
+			var target=event.target
+			if (target.nodeName==="TD") {
+				target.parentNode.className = ""
+			}
+		});
+	});
+
+	document.forms[0].onsubmit = function(event){
+		var url = baseURL+"/waiter/insertWaiter";
+		var id = document.querySelector("input[name=id]").value;
+		var realname = document.querySelector("input[name=realname]").value;
+		var telephone = document.querySelector("input[name=telephone]").value;
+		
+		var data ={
+			id:id,
+			realname:realname,
+			telephone:telephone
+		};
+
+		$.post(url,data,function(a,b){
+			alert(a.message);
+			reloadData();
+		});
+
+		event.preventDefault();
+	}
+
+	btn_add.onclick = function(){
+		document.querySelector("input[name=realname]").value = "";
+		document.querySelector("input[name=telephone]").value = "";
+		document.querySelector("input[name=id]").value = "";
+	}
+
+	tbody.onclick = function(event){
+		if(event.target.nodeName === "A"){
+			switch(event.target.className){
+				case "btn_del":
+					var id = event.target.parentNode.parentNode.firstElementChild.firstElementChild.value;
+					var url = baseURL+"/waiter/deleteWaiterById";
+					var data = "id="+id;
+					$.get(url,data,function(response,status){
+						alert(response.message);
+						reloadData();
+					});
+					break;
+				case "btn_upd":
+					var id = event.target.parentNode.parentNode.children[0].firstElementChild.value;
+					var realname = event.target.parentNode.parentNode.children[1].innerText;
+					var telephone = event.target.parentNode.parentNode.children[3].innerText;
+					document.querySelector("input[name=realname]").value = realname;
+					document.querySelector("input[name=telephone]").value = telephone;
+					document.querySelector("input[name=id]").value = id;
+					break;
+				}
+			}
+		}
+
+		reloadData();
+}
+	
 </script>
+<h1>服务员工管理</h1>
 <div class="waiter">
-	服务员管理
-	<div id="one">
-		<input type="text" name="id">
-		<input type="submit" value="查找" class="btn_find">
+	<div class="btns">
+		<div id="btn_add" class="btn">添加</div>
+		<div id="btn_import" class="btn">批量导入</div>
+		<!-- <div id="one" class="btn_find">
+			<input type="text" name="id">
+		</div> -->
 	</div>
 
+	<div style="margin-bottom: .5em">
+		<form action="javascript:void(0)">
+			<input type="hidden" name="id" />
+			姓名<input type="text" name="realname"/>
+			手机号 <input type="text" name="telephone"/>
+			<input type="submit" class="button" value="提交">
+		</form>
+	</div>
+	
+	
 	<table class="table" id="waiter_tb1">
 		<thead>
 			<tr>
@@ -77,7 +200,17 @@
 			</tr>
 		</thead>
 		<tbody>
-			
+			<tr class="none">
+				<td><input type="checkbox"></td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td>
+					<a class="btn_del" href="#">删除</a>
+					<a class="btn_upd" href="#">修改</a>
+				</td>
+			</tr>
 		</tbody>
 	</table>
 </div>
+	

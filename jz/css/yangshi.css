@@ -1,6 +1,8 @@
 		html,body,.sy,.wrapper{
 				height: 100%;
 				color: #333;
+				margin: 0;
+				padding: 0;
 			}
 		.sy>.wrapper{
 			position: relative;
@@ -11,12 +13,11 @@
 			flex-basis: 20%;
 			text-align: center;
 			background-color: #1369c0;
-
 		}
 		.sy>.wrapper>.top>b{
 			font-size: 3em;
 			position: relative;
-			top: 25%;
+			top: 10%;
 		}
 		.sy>.wrapper>.bottom{
 			flex: 1;
@@ -47,6 +48,9 @@
 		}
 		.sy>.wrapper>.bottom>.left>ul{
 			width: 100%;
+		}
+		.sy>.wrapper>.bottom>.left>ul li.current {
+			background-color: #ededed;
 		}
 		.sy>.wrapper>.bottom>.left>ul>li{
 			list-style: none;
