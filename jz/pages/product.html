@@ -179,7 +179,7 @@
 						$(".btn_upd").click(function(){
 							$(".hide").removeClass("hide");
 						})
-						//获取id
+						// //获取id
 						 var id = event.target.parentNode.parentNode.children[0].firstElementChild.value;
 						 //获取名称
 						 var name = event.target.parentNode.parentNode.children[1].innerText;
@@ -188,6 +188,12 @@
 						 document.querySelector("input[name=id]").value=id;
 						 document.querySelector("input[name=name]").value=name;
 						 document.querySelector("input[name=description]").value=description; 
+						// var url = baseURL+"/product/updateProduct";
+						// var data = "id="+id;
+						// $.post(url,data,function(response,status){
+						// 		alert(response.message);
+						// 		reloadData();
+						// });
 						break;
 					
 				}
