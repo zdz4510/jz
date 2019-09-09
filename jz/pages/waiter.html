@@ -23,7 +23,7 @@
 	.hide{
 		display: none;
 	}
-	.wrapper {
+	.wrapper01 {
 		position: fixed;
 		left: 0;
 		right: 0;
@@ -34,17 +34,27 @@
 		padding-top: 50px;
 	}
 	.modal {
-		width: 100px;
-		height: 100px;
+		width: 400px;
+		height: 400px;
 		background-color: #fff;
-	}
-	form {
+		border-radius: 1em;
 		position: fixed;
-		right:40%;
-		bottom: 50%;
+		right: 35%;
+		top: 15%;
+	}
+	.btn_quit {
+		width: 38px;
+		height: 20px;
+		background-color: #409EFF;
+		cursor: pointer;
+		border-radius: .5em;
+		font-size: 13px;
+		color: #fff;
+		text-align: center;
+
 	}
 	input {
-		display: inline-block;
+		display: block;
 		margin-bottom: 20px;
 		border-radius: .5em;
 		color: #333;
@@ -153,11 +163,16 @@ window.onload=function(){
 	}
 
 	btn_add.onclick = function(){
-		$(".hide").removeClass("hide")
+		$(".hide").removeClass("hide");
 		document.querySelector("input[name=realname]").value = "";
 		document.querySelector("input[name=telephone]").value = "";
 		document.querySelector("input[name=id]").value = "";
 	}
+	//用jQuery给模态框和层罩添加事件
+	$('.btn_quit').click(function(){
+		$(".modal,.wrapper01").addClass("hide");
+	})
+	
 
 	tbody.onclick = function(event){
 		if(event.target.nodeName === "A"){
@@ -190,7 +205,7 @@ window.onload=function(){
 <h1>服务员工管理</h1>
 
 <div class="waiter">
-	<div class="hide wrapper"></div>
+	<div class="hide wrapper01"></div>
 	<div class="btns">
 		<div id="btn_add" class="btn">添加</div>
 		<div id="btn_import" class="btn">批量导入</div>
@@ -198,12 +213,13 @@ window.onload=function(){
 			<input type="text" name="id">
 		</div> -->
 	</div>
-		<div style="margin-bottom: .5em" class="hide">
+		<div style="margin-bottom: .5em" class="hide modal">
 			<form action="javascript:void(0)">
 				<input type="hidden" name="id" />
 				姓名<input type="text" name="realname"/>
 				手机号 <input type="text" name="telephone"/>
 				<input type="submit" class="button" value="提交">
+				<div class="btn_quit">退出</div>
 			</form>
 		</div>
 	
